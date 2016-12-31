@@ -172,3 +172,15 @@ export const getArrayFromObject = function(data,key,returnString) {
     return items.join(', ');
   }
 }
+
+/**
+ * checks if an object has a specific string
+ * @param  {object} obj [object to check]
+ * @param  {string} val [value to check for]
+ * @return {boolean}     whether or not the object has the value
+ */
+export const contains = function(obj,val) {
+  if (obj.indexOf) {
+    return obj.indexOf(val) > -1 ? true : false;
+  }
+}
