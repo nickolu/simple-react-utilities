@@ -1,3 +1,16 @@
+
+/*****************
+ * ARRAY METHODS *
+ *****************/
+
+/**
+ * if given a name property and an array containing objects which each have a name property, 
+ * will return the first object with the matching name
+ * 
+ * @param  {array} arr  [array of objects]
+ * @param  {string} name [name property in object]
+ * @return {object}      [first object matching the name provided]
+ */
 export const getObjectByName = function(arr,name) {
   let i = 0;
   for (i in arr) {
@@ -11,11 +24,14 @@ export const getObjectByName = function(arr,name) {
 };
 
 /**
- * gets an object from an array of objects with a matching property name and value
- * @param  {[type]} arr  [description]
- * @param  {[type]} prop [description]
- * @param  {[type]} val  [description]
- * @return {[type]}      [description]
+ * if given an array containing objects, a property name, and a value,
+ * will return an array of objects each which contain the supplied property name and value 
+ * 
+ * @param  {array} arr  [description]
+ * @param  {string} prop [description]
+ * @param  {string} val  [description]
+ * @param  {string} usePartialMatch  [description]
+ * @return {array}      [array of objects matching search criteria]
  */
 export const getObjectsByProp = function(arr,propName,val,usePartialMatch) {
   let i = 0;
@@ -35,6 +51,12 @@ export const getObjectsByProp = function(arr,propName,val,usePartialMatch) {
   return objects;
 };
 
+/**
+ * counts the number of times an value is in an array
+ * @param  {array} arr  [array to search]
+ * @param  {string} item [value to search for]
+ * @return {number}      [number of times the value appears in the array]
+ */
 export const countItemInArray = function(arr,item) {
   let l = arr.length;
   let i = 0;
@@ -50,39 +72,6 @@ export const countItemInArray = function(arr,item) {
   }
 
   return count;
-}
-
-export const titleCase = function(str) {
-  str = str.replace(/_/gi,' ');
-  str = str.toLowerCase().split(' ');
-  for (var i = 0; i < str.length; i++) {
-    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
-  }
-  str = str.join(' ').replace(/Of/gi, 'of');
-  str = str.replace(/The/gi, 'the');
-  str = str.replace(/In/gi, 'in');
-  str = str.charAt(0).toUpperCase() + str.slice(1);
-
-  return str;
-}
-
-export const getModifier = function(score) {
-  let modifier = Math.floor((score - 10)/2);
-  let operator = "+"
-  if (modifier < 0) {
-    operator = "-";
-  }
-  return operator+""+Math.abs(modifier);
-};
-
-/**
- * removes spaces and convertsa string to lowercase for easier matching
- * @param  {string} str [string to shrink]
- * @return {string}     [shrunken string]
- */
-export const shrink = function(str) {
-  var myStr = str;
-  return myStr.replace(/\s/g, '').toLowerCase();
 }
 
 /**
@@ -120,15 +109,6 @@ export const arrayUnique = function(arr) {
     }
 
     return a;
-}
-
-
-/**
- * gets the ability score modifier for given ability score
- * @param  {number} num Ability Score for which to get modifier
- */
-export const getAbilityScoreModifier = function(num) {
-  return Math.floor((num - 10) / 2);
 }
 
 /**
@@ -183,4 +163,64 @@ export const contains = function(obj,val) {
   if (obj.indexOf) {
     return obj.indexOf(val) > -1 ? true : false;
   }
+}
+
+/******************
+ * STRING METHODS *
+ ******************/
+
+/**
+ * converts a string from any case to Title Case
+ * @param  {string} str 
+ * @return {string}     [string in title case]
+ */
+export const titleCase = function(str) {
+  str = str.replace(/_/gi,' ');
+  str = str.toLowerCase().split(' ');
+  for (var i = 0; i < str.length; i++) {
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+  }
+  str = str.join(' ').replace(/Of/gi, 'of')
+    .replace(/The/gi, 'the')
+    .replace(/In/gi, 'in')
+    .charAt(0).toUpperCase() + str.slice(1);
+
+  return str;
+}
+
+/**
+ * removes spaces and converts a string to lowercase for easier matching
+ * @param  {string} str [string to shrink]
+ * @return {string}     [shrunken string]
+ */
+export const shrink = function(str) {
+  var myStr = str;
+  return myStr.replace(/\s/g, '').toLowerCase();
+}
+
+/**
+ * gets a modifier value for a D&D ability score
+ * @param  {number} score [ability score]
+ * @return {string}       [modifier]
+ */
+export const getModifier = function(score) {
+  let modifier = Math.floor((score - 10)/2);
+  let operator = "+"
+  if (modifier < 0) {
+    operator = "-";
+  }
+  return operator+""+Math.abs(modifier);
+};
+
+
+/**************************
+ * D&D FORMULAS & METHODS *
+ **************************/
+
+/**
+ * gets the ability score modifier for given ability score
+ * @param  {number} num Ability Score for which to get modifier
+ */
+export const getAbilityScoreModifier = function(num) {
+  return Math.floor((num - 10) / 2);
 }
