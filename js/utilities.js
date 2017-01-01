@@ -240,17 +240,24 @@ var ncUtilities = {
    * @return {string}     [string in title case]
    */
   titleCase : function(str) {
-    str = str.replace(/_/gi,' ');
-    str = str.toLowerCase().split(' ');
-    for (var i = 0; i < str.length; i++) {
-      str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
-    }
-    str = str.join(' ').replace(/Of/gi, 'of')
-      .replace(/The/gi, 'the')
-      .replace(/In/gi, 'in')
-      .charAt(0).toUpperCase() + str.slice(1);
+    var titleString = false;
 
-    return str;
+    if (typeof str === "string") {
+      str = str.replace(/_/gi,' ').toLowerCase().split(' ');
+
+      for (var i = 0; i < str.length; i++) {
+        str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+      }
+      str = str.join(' ')
+            .replace(/Of/gi, 'of')
+            .replace(/The/gi, 'the')
+            .replace(/In/gi, 'in')
+            .replace(/Is/gi, 'is');
+
+      titleString = str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    return titleString;
   },
 
   /**

@@ -208,37 +208,211 @@ describe("utilities", function() {
 	});
 
 	describe('getArrayFromObject', function(){
-		it('should return undefined if the key value pair does not provide an array from target object', function(){});
-		it('should return an array if all goes accordiong to plan', function(){});
-		it('should return a string if true is given for the third argument', function(){});
+		var testObject = {
+			"myArray" : ['finley','is','cute'],
+			"myString" : "finley is cute"
+		};
+
+		it('should return undefined if the key value pair does not provide an array from target object', function(){
+			var nullArray = utilities.getArrayFromObject(testObject,"myString",true);
+
+			expect(nullArray).to.be.undefined;
+		});
+
+		it('should return an array if all goes accordiong to plan', function(){
+			expect(utilities.getArrayFromObject(testObject,"myArray",false)).to.equal(testObject["myArray"]);
+		});
+
+		it('should return a string if true is given for the third argument', function(){
+			expect(utilities.getArrayFromObject(testObject,"myArray",true)).to.equal(testObject["myArray"].join(', '));
+		});
 	});
 
 	describe('contains', function(){
-		it('should return true if given a string for both arguments, and the first string contains the second string', function(){});
-		it('should return true if one of the items in the array is equal to the given string', function(){});
-		it('should return undefined if the first argument does not have the indexOf method',function(){});
+		it('should return true if given a string for both arguments, and the first string contains the second string', function(){
+			var myString = "this is cool";
+
+			expect(utilities.contains(myString,"is coo")).to.equal(true);
+			expect(utilities.contains(myString,"this is")).to.equal(true);
+			expect(utilities.contains(myString,"his")).to.equal(true);
+			expect(utilities.contains(myString,"flowers")).to.equal(false);
+
+		});
+
+		it('should not return true even if the letter casing do not match', function(){
+			var myString = "this is cool";
+	
+			expect(utilities.contains(myString,"This is")).to.equal(false);
+		});
+
+		it('should return true if one of the items in the array is equal to the given string', function(){
+			 var myArray = ['finley','is','cute'];
+
+			 expect(utilities.contains(myArray,'cute')).to.equal(true);
+		});
+
+		it('should not return true if the first argument is an array, and the second is only a partial match', function(){
+			 var myArray = ['finley','is','cute'];
+
+			 expect(utilities.contains(myArray,'cut')).to.equal(false);
+		});
+
+		it('should return undefined if the first argument does not have the indexOf method',function(){
+			var myObject = {};
+			var myArray = ['finley','is','cute']
+
+			if (!myObject.indexOf) {
+				expect(utilities.contains(myObject,'cut')).to.be.undefined;		
+			}
+
+		});
 	});
 
 	describe('titleCase', function(){
-		it('should have each word begin with a capital letter', function(){});
-		it('should have underscores replaced with spaces', function(){});
-		it('should not capitalize the words "the" or "in" ', function(){});
-		it('should return false if first argument is not a string', function(){});
+		var myString = "Finley is one of the_best in the_world";
+		var titleString = utilities.titleCase(myString);
+		var splitString = titleString.split(' ');
+		
+		it('should have each word begin with a capital letter', function(){
+			expect(splitString[2].charAt(0)).to.equal("O");
+			expect(splitString[2].charAt(0)).not.to.equal("o");
+		});
+
+		it('should have underscores replaced with spaces', function(){
+			expect(titleString.indexOf('_')).to.equal(-1);
+			expect(splitString.length).to.equal(9);	
+		});
+
+		it('should not capitalize the words "the", "in", "of", or "is"', function(){
+			expect(splitString[1]).to.equal("is");
+			expect(splitString[3]).to.equal("of");
+			expect(splitString[4]).to.equal("the");
+			expect(splitString[6]).to.equal("in");
+
+			expect(splitString[1]).not.to.equal("Is");
+			expect(splitString[3]).not.to.equal("Of");
+			expect(splitString[4]).not.to.equal("The");
+			expect(splitString[6]).not.to.equal("In");
+		});
+
+		it('should return false if first argument is not a string', function(){
+			expect(utilities.titleCase({'name' : 'super cool baby'})).to.equal(false);
+		});
 	});
 
 	describe('shrink', function(){
-		it('should not have any spaces', function(){});
-		it('should be lowercase', function(){});
-	});
+		var myString = "Finley is one of the_best in the_world";
+		var myShrink = utilities.shrink(myString);
 
-	describe('getModifier', function(){
-		it('should get the right value', function(){});
-		it('should show the correct operator', function(){});
+		it('should not have any spaces', function(){
+			expect(myShrink.indexOf(' ')).to.equal(-1);
+		});
+
+		it('should be all lowercase', function(){
+			var allLowerCase = true;
+			var myShrinkArray = myShrink.split();
+			var i, l = myShrinkArray.length;
+			
+			for (i = 0; i < l; i++) {
+				if (myShrinkArray[i] !== myShrinkArray[i].toLowerCase()) {
+					allLowerCase = false;
+					break;
+				}
+			}
+
+			expect(allLowerCase).to.equal(true);
+		});
 	});
 
 	describe('getAbilityScoreModifier', function(){
-		it('should get the right value', function(){});
+		var abilityScores = [
+			{
+				'input' : 10,
+				'expected_modifier' : 0,
+				'operator' : ''
+			},
+			{
+				'input' : 12,
+				'expected_modifier' : 1,
+				'expected_operator' : '+'
+			},
+			{
+				'input' : 6,
+				'expected_modifier' : -2,
+				'expected_operator' : '-'
+			},
+			{
+				'input' : 0,
+				'expected_modifier' : -5,
+				'expected_operator' : '-'
+			},
+			{
+				'input' : 10000,
+				'expected_modifier' : 4995,
+				'expected_operator' : '+'
+			}
+		];
+
+		it('should get the right value', function(){
+			var i, input, l = abilityScores.length;
+
+			for (i = 0; i < l; i++) {
+				input = utilities.getAbilityScoreModifier(abilityScores[i].input);
+				expect(Number(input)).to.equal(abilityScores[i].expected_modifier)	
+			}
+		});
 	});
 
-	
+	describe('getModifier', function(){
+		var abilityScores = [
+			{
+				'input' : 10,
+				'expected_modifier' : 0,
+				'expected_operator' : ''
+			},
+			{
+				'input' : 12,
+				'expected_modifier' : 1,
+				'expected_operator' : '+'
+			},
+			{
+				'input' : 6,
+				'expected_modifier' : -2,
+				'expected_operator' : '-'
+			},
+			{
+				'input' : 0,
+				'expected_modifier' : -5,
+				'expected_operator' : '-'
+			},
+			{
+				'input' : 10000,
+				'expected_modifier' : 4995,
+				'expected_operator' : '+'
+			}
+		];
+
+		it('should get the right value', function(){
+			var i, input, l = abilityScores.length;
+
+			for (i = 0; i < l; i++) {
+				input = utilities.getModifier(abilityScores[i].input);
+				expect(Number(input)).to.equal(abilityScores[i].expected_modifier)	
+			}
+		});
+
+		it('should include the correct operator', function(){
+			var i, input, operator, l = abilityScores.length;
+
+			for (i = 0; i < l; i++) {
+				var input = utilities.getModifier(abilityScores[i].input);
+				if (abilityScores[i].input !== 10) {
+					operator = input.charAt(0);
+					expect(operator).to.equal(abilityScores[i].expected_operator)		
+				} else {
+					expect(input.toString().charAt(0)).to.be.a.number;
+				}
+			}
+		});
+	});	
 });
