@@ -1,7 +1,13 @@
-{
+{ 
+  "name": "simple-react-utilities",
+  "version": "1.1.0",
+  "description": "utilities for react",
+  "main" : "js/utilities.js",
   "engines": {
     "node": ">= 0.10.0"
   },
+  "author": "Nickolus Cunningham",
+  "license": "ISC",
   "devDependencies": {
     "chai": "^3.5.0",
     "grunt": "^0.4.5",
