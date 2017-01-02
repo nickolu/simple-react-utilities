@@ -52,7 +52,7 @@ var ncUtilities = {
   },
 
   /**
-   * counts the number of times an value is in an array
+   * counts the number of times a value is in an array
    * @param  {array} arr  [array to search]
    * @param  {string} item [value to search for]
    * @return {number}      [number of times the value appears in the array]
